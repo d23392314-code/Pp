@@ -45,10 +45,13 @@ jobs:
           cp "$INO" "build_sketch/$NAME/$NAME.ino"
           echo "SKETCH_DIR=build_sketch/$NAME" >> $GITHUB_ENV
 
+      - name: Show board options (debug)
+        run: arduino-cli board details -b esp32:esp32:esp32s3 | grep -A40 "Partition Scheme" || true
+
       - name: Compile
         run: |
           arduino-cli compile \
-            --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=default_16MB" \
+            --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=16M,PartitionScheme=huge_app" \
             --warnings default \
             --output-dir out \
             "$SKETCH_DIR"
